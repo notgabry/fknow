@@ -1,0 +1,22 @@
+[
+  {
+    "Key": "help",
+    "Default": "✨ Accedi ai contenuti *Premium* \\(\"_100% corrispondente_\"\\) di *KnowUnity*.\n\n❓ Puoi *cercare* su *KnowUnity* con `@KnowUnityFreeBot [titolo]` e __scegliendo tra i migliori contenuti__ disponibili.\n\n💯 _Invia il link_ per ricevere direttamente il *PDF*.\n\n_Psss! Per suggerimenti o risoluzioni dei problemi non esitare a contattare [@notgabr\\_y](tg://user?id=5567695441)_"
+  },
+  {
+    "Key": "start",
+    "Default": "❓Inserisci il link di *KnowUnity* per scaricare il __file__\n✨Scarica il tuo *PDF* __velocemente__!"
+  },
+  {
+    "Key": "addToGroup",
+    "Default": "👋 Grazie di aver invitato *KnowUnityFreeBot* nel tuo canale.\n\n⭐ Dal `17/02/2025` puoi utilizzare i _comandi_ anche nei gruppi!"
+  },
+  {
+    "Key": "invalidURL",
+    "Default": "❌ Inserisci un *URL valido*!\n📩 Per __iniziare__ puoi *provare* con ~https://knowunity.it/app/knows/c4072230-7c5c-4062-b689-6d6426f062e0~"
+  },
+  {
+    "Key": "invalidPerms",
+    "Default": "❌ *Non riesco* a _inviare_ il file nel *gruppo*, controlla i *permessi* del bot!"
+  }
+]
