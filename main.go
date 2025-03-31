@@ -36,7 +36,7 @@ func main() {
 		log.Fatal(err)
 		return
 	}
-	i18n.AddLanguage("en", itTranslations)
+	i18n.AddLanguage("it", itTranslations)
 
 	// commands
 	b.Handle("/start", func(c tele.Context) error {
