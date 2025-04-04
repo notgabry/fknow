@@ -4,6 +4,7 @@ import (
 	"fknow/utils"
 	"fmt"
 	"regexp"
+	"time"
 
 	"github.com/charmbracelet/log"
 	tele "gopkg.in/telebot.v4"
@@ -24,21 +25,28 @@ func OnText(c tele.Context, i18n utils.Translator) error {
 		return c.Send(i18n.GT("invalidURL"), tele.NoPreview, tele.ModeMarkdownV2)
 	}
 
-	url := utils.GetPDF(match[0])
+	url, desc := utils.GetPDF(match[0])
 	if url == "" {
 		return c.Send(i18n.GT("invalidURL"), tele.NoPreview, tele.ModeMarkdownV2)
 	}
 
 	log.Info("New File Requested", "id", match[0], "user", c.Message().Sender.Username)
 
-	r := tele.InlineButton{
-		URL:  fmt.Sprintf("https://knowunity.it/knows/%s", match[0]),
-		Text: "👍 Apri in app!",
-	}
+	a := &tele.ReplyMarkup{}
+	btnURL := a.URL(i18n.TOnly("openInApp"), fmt.Sprintf("https://knowunity.it/knows/%s", match[0]))
+	btnQuery := a.QueryChat(i18n.TOnly("querySearch"), desc)
 
-	err := c.Send(&tele.Document{File: tele.FromURL(url)}, &tele.ReplyMarkup{
-		InlineKeyboard: [][]tele.InlineButton{{r}},
-	})
+	a.Inline(
+		a.Row(btnURL),
+		a.Row(btnQuery),
+	)
+
+	err := c.Send(
+		&tele.Document{
+			File: tele.FromURL(url),
+			FileName: fmt.Sprintf("appunti_%d",
+				time.Now().UnixMilli()),
+		}, a)
 
 	if err != nil {
 		c.Send(i18n.GT("invalidPerms"), tele.ModeMarkdownV2)

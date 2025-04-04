@@ -8,6 +8,7 @@ import (
 
 type Translator interface {
 	GT(key string) string
+	TOnly(key string) string
 }
 
 type I18nWithEscape struct {
@@ -23,6 +24,10 @@ func NewI18nWithEscape(i18nInstance *goeasyi18n.I18n) *I18nWithEscape {
 // Get Escaped
 func (i *I18nWithEscape) GT(key string) string {
 	return Escape(i.I18n.Translate("it", key), []rune{'.', '!', '=', '-'})
+}
+
+func (i *I18nWithEscape) TOnly(key string) string {
+	return i.I18n.Translate("it", key)
 }
 
 // dont use tgbotapi#Escapetext or the formatting will be escaped too

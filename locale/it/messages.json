@@ -1,11 +1,11 @@
 [
   {
     "Key": "help",
-    "Default": "✨ Accedi ai contenuti *Premium* \\(\"_100% corrispondente_\"\\) di *KnowUnity*.\n\n❓ Puoi *cercare* su *KnowUnity* con `@KnowUnityFreeBot [titolo]` e __scegliendo tra i migliori contenuti__ disponibili.\n\n💯 _Invia il link_ per ricevere direttamente il *PDF*.\n\n_Psss! Per suggerimenti o risoluzioni dei problemi non esitare a contattare [@notgabr\\_y](tg://user?id=5567695441)_"
+    "Default": "✨ Accedi ai contenuti *Premium* \\(\"_100% corrispondente_\"\\) di *KnowUnity*.\n\n❓ Puoi *cercare* su *KnowUnity* con `@KnowUnityFreeBot [titolo]` e __scegliendo tra i migliori contenuti__ disponibili.\n\n💯 _Invia il link_ per ricevere direttamente il *PDF*.\n\n_Psss! Per suggerimenti o risoluzioni dei problemi non esitare a contattare [@notgabr\\_y](tg://user?id=5567695441) o [@CentoDiPing](tg://user?id=5518044868)\nTutto il codice é disponibile su [github](https://github.com/notgabry/fknow)_."
   },
   {
     "Key": "start",
-    "Default": "❓Inserisci il link di *KnowUnity* per scaricare il __file__\n✨Scarica il tuo *PDF* __velocemente__!"
+    "Default": "❓Inserisci il link di *KnowUnity* per scaricare il __file__\n✨Maggiori __informazioni__ con `/help`!"
   },
   {
     "Key": "addToGroup",
@@ -18,5 +18,13 @@
   {
     "Key": "invalidPerms",
     "Default": "❌ *Non riesco* a _inviare_ il file nel *gruppo*, controlla i *permessi* del bot!"
+  },
+  {
+    "Key": "openInApp",
+    "Default": "➡️ Apri in app"
+  },
+  {
+    "Key": "querySearch",
+    "Default": "👀 Cerca simili..."
   }
 ]

@@ -3,47 +3,46 @@ package utils
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"net/url"
 	"sort"
 )
 
-type UnityResponsePDF struct {
-	Title     string       `json:"title"`
-	Documents []ContentPDF `json:"documents"`
+type PDFResponse struct {
+	Description string   `json:"description"`
+	Documents   []PDFDoc `json:"documents"`
 }
 
-type ContentPDF struct {
-	ContentUrl string `json:"contentUrl"`
+type PDFDoc struct {
+	URL string `json:"contentUrl"`
 }
 
-type UnityReponseList struct {
-	Content []KnowList `json:"content"`
+type SearchResponse struct {
+	Content []PDFItem `json:"content"`
 }
 
-type KnowList struct {
-	Know  ContentList `json:"know"`
+type PDFItem struct {
+	Know  KnowDetails `json:"know"`
 	Score float64     `json:"score"`
 }
 
-type KnowerList struct {
-	User UserList `json:"user"`
+type KnowDetails struct {
+	ID     string `json:"uuid"`
+	Title  string `json:"title"`
+	Likes  int64  `json:"likes"`
+	Thumb  string `json:"thumbnailLargeUrl"`
+	Knower Knower `json:"knower"`
 }
 
-type UserList struct {
+type Knower struct {
+	User UserDetails `json:"user"`
+}
+
+type UserDetails struct {
 	Name string `json:"name"`
 }
 
-type ContentList struct {
-	UUID           string     `json:"uuid"`
-	Likes          int64      `json:"likes"`
-	Title          string     `json:"title"`
-	LargeThumbnail string     `json:"thumbnailLargeUrl"`
-	Knower         KnowerList `json:"knower"`
-}
-
-type Pdfs struct {
+type PDF struct {
 	ID       string
 	Title    string
 	Score    float64
@@ -52,81 +51,57 @@ type Pdfs struct {
 	Knower   string
 }
 
-const BaseURL string = "https://apiedge-eu-central-1.knowunity.com"
-const UserAgent string = "KnowUnityFree Downloader/1.0"
+const (
+	BaseURL   = "https://apiedge-eu-central-1.knowunity.com"
+	UserAgent = "KnowUnityFree Downloader/1.0"
+)
 
-func MakeRequest(url string) []byte {
+func fetch(url string, target interface{}) {
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
-		return []byte{}
+		return
 	}
 	req.Header.Set("User-Agent", UserAgent)
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
+	resp, err := (&http.Client{}).Do(req)
 	if err != nil {
-		return []byte{}
+		return
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return []byte{}
+		return
 	}
 
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return []byte{}
-	}
-
-	return body
+	json.NewDecoder(resp.Body).Decode(target)
 }
 
-func GetPDF(id string) string {
-	body := MakeRequest(fmt.Sprintf("%s/knows/%s", BaseURL, id))
-	if len(body) == 0 {
-		return ""
-	}
+func GetPDF(id string) (string, string) {
+	var res PDFResponse
+	fetch(fmt.Sprintf("%s/knows/%s", BaseURL, id), &res)
 
-	var response UnityResponsePDF
-	if err := json.Unmarshal(body, &response); err != nil {
-		fmt.Println(err)
-		return ""
+	if len(res.Documents) == 0 {
+		return "", ""
 	}
-
-	if len(response.Documents) == 0 {
-		return ""
-	}
-
-	return response.Documents[0].ContentUrl
+	return res.Documents[0].URL, res.Description
 }
 
-func ListPDF(description string) []Pdfs {
-	body := MakeRequest(fmt.Sprintf("%s/search/knows?query=%s&contentType=KNOW&limit=20&contentLanguageCode=it", BaseURL, url.QueryEscape(description)))
-	if len(body) == 0 {
-		return []Pdfs{}
-	}
+func ListPDF(query string) []PDF {
+	var res SearchResponse
+	fetch(fmt.Sprintf("%s/search/knows?query=%s&contentType=KNOW&limit=20&contentLanguageCode=it", BaseURL, url.QueryEscape(query)), &res)
 
-	var response UnityReponseList
-	if err := json.Unmarshal(body, &response); err != nil {
-		fmt.Println(err)
-		return []Pdfs{}
-	}
-
-	var pdfs []Pdfs
-	for _, item := range response.Content {
-		pdfs = append(pdfs, Pdfs{
-			ID:       item.Know.UUID,
+	pdfs := make([]PDF, len(res.Content))
+	for i, item := range res.Content {
+		pdfs[i] = PDF{
+			ID:       item.Know.ID,
 			Title:    item.Know.Title,
-			ThumbURL: item.Know.LargeThumbnail,
+			ThumbURL: item.Know.Thumb,
 			Score:    item.Score,
 			Likes:    item.Know.Likes,
 			Knower:   item.Know.Knower.User.Name,
-		})
+		}
 	}
 
-	sort.Slice(pdfs, func(i, j int) bool {
-		return pdfs[i].Score > pdfs[j].Score
-	})
+	sort.Slice(pdfs, func(i, j int) bool { return pdfs[i].Score > pdfs[j].Score })
 
 	return pdfs
 }
