@@ -18,5 +18,5 @@ FROM scratch as final
 WORKDIR /root/
 COPY --from=builder /app/dev .
 
-ARG TOKEN
+ARG Token
 ENTRYPOINT [ "./dev" ]
