@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # Build full image
-FROM golang:1.24.3 AS builder
+FROM golang:1.24.3-bookworm AS builder
 COPY . /app
 
 WORKDIR /app
