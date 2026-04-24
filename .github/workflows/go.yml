@@ -1,0 +1,43 @@
+name: Build & Release
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Build binaries
+        run: |
+          GOOS=linux   GOARCH=amd64 go build -o fknow-linux-amd64   .
+          GOOS=linux   GOARCH=arm64 go build -o fknow-linux-arm64   .
+          GOOS=windows GOARCH=amd64 go build -o fknow-windows-amd64.exe .
+          GOOS=darwin  GOARCH=amd64 go build -o fknow-darwin-amd64  .
+
+      - name: Get short SHA
+        id: sha
+        run: echo "short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: build-${{ steps.sha.outputs.short }}
+          name: Build ${{ steps.sha.outputs.short }}
+          body: "Automated build from commit ${{ github.sha }}"
+          files: |
+            fknow-linux-amd64
+            fknow-linux-arm64
+            fknow-windows-amd64.exe
+            fknow-darwin-amd64
