@@ -13,7 +13,7 @@
   },
   {
     "Key": "invalidURL",
-    "Default": "❌ Inserisci un *URL valido*!\n📩 Per __iniziare__ puoi *provare* con ~https://knowunity.it/app/knows/c4072230-7c5c-4062-b689-6d6426f062e0~"
+    "Default": "❌ Inserisci un *URL valido*.\n📩 Per __iniziare__ puoi *provare* con ~https://knowunity.it/app/knows/c4072230-7c5c-4062-b689-6d6426f062e0~"
   },
   {
     "Key": "invalidPerms",
