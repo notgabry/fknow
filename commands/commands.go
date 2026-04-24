@@ -11,5 +11,8 @@ func Start(c tele.Context, i18n utils.Translator) error {
 }
 
 func Help(c tele.Context, i18n utils.Translator) error {
-	return c.Send(i18n.GT("help"), tele.NoPreview, tele.ModeMarkdownV2)
+	return c.Send(&tele.Photo{
+		File:    tele.FromDisk("./assets/fknow.png"),
+		Caption: i18n.GT("help"),
+	}, tele.ModeMarkdownV2)
 }
